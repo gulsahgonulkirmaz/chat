@@ -1,0 +1,97 @@
+ <?php 
+     require_once 'include.php';
+        // Form Gönderilmişmi Kontrolü Yapalım
+        if($_POST){
+        
+            // Formdan Gelen Kayıtlar
+            $ad        =    $_POST["firstname"];
+            $soyad    =    $_POST["lastname"];
+            $sifre        =    $_POST["password"];
+            $tkrsifre    =    $_POST["2password"];
+            $kullanici        =    $_POST["username"];
+            if(isset($sifre) && !empty($sifre) && isset($tkrsifre)) {
+                if($sifre != $tkrsifre) {
+                    $mesaj ="<script>alert('Sifreler eşleşmedi Lütfen tekrar deneyiniz.')</script>";
+                    echo $mesaj;
+                }else if($sifre == $tkrsifre) {
+                   // Veritabanına Ekleyelim.
+                    $kaydol        = "INSERT INTO users (user_active, last_name, first_name,user_name, user_pswr) VALUES ('0', '$soyad', '$ad','$kullanici','$sifre')";
+                    
+                    $kaydol = mysqli_query($conn, $kaydol);
+                    // Sorun Oluştu mu diye test edelim. Eğer sorun yoksa hata vermeyecektir
+                    if($kaydol){
+                        header("Location:http://localhost/index.php");;
+                    }else{
+                        echo "Bir Sorun Oluştu";
+                    }
+                }
+            }else {
+                $mesaj ="<script>alert('Şifre boş olamaz.')</script>";
+                echo $mesaj;
+            }
+            
+        }
+
+mysqli_close($conn);
+    ?>
+
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Chat</title>
+    <link rel="stylesheet" href="css/chat.css">
+</head>
+<body>
+    <div id="anasayfa">
+        <div class="table">
+                <div id="chatimg">
+                <img src="images/rsm.png" width="100%" >
+                </div>
+        </div>
+        <div class="table">
+        <div id="adminpanel">
+    <form action="" method="POST">
+    <div id="aa">
+        <table border="0" align="center"  width="500" height="200" style="margin-left:50px;padding-bottom:100px;">
+          <tr style="border-bottom:2px;solid #000000;">
+              <td style="font-size: 20px;padding-bottom: 15px;"align="center;float:left;"><b>Adınız:</b></td>
+              <td> <input  style="width: 200px;height: 23px; border-color:rgb(173, 8, 8);font-size: 15px;"type="text" name="firstname" placeholder=" Adınızı Giriniz"></td>
+          </tr>
+        
+  <tr >
+      <td style="font-size: 20px;padding-bottom: 15px;"align="center;float:left;"><b>Soyadınız:</b></td>
+      <td><input style="width: 200px;height: 23px; border-color:rgb(173, 8, 8);font-size:15px;" type="text" name="lastname" placeholder=" Soyadınızı Giriniz"></td>
+
+  </tr>
+  <tr >
+    <td style="font-size: 20px;padding-bottom: 15px;"align="center;float:left;"><b>Şifreniz:</b></td>
+    <td><input style="width: 200px;height: 23px; border-color:rgb(173, 8, 8);font-size:15px;" type="password" name="password" placeholder=" Şifrenizi Giriniz"></td>
+
+</tr>
+  <tr>
+      <td style="font-size: 20px;padding-bottom: 15px;"align="center;float:left;"><b>Tekrar Şifre:</b></td>
+      <td><input style="width: 200px;height: 23px; border-color:rgb(173, 8, 8);font-size: 15px;" type="password" name="2password" placeholder=" Tekrar Şifrenizi Giriniz"></td><br>
+  </tr>
+  <tr>
+    <td style="font-size: 20px;padding-bottom: 15px;"align="center;float:left;"><b>Kullanıcı Adınız:</b></td>
+    <td><input style="width: 200px;height: 23px; border-color:rgb(173, 8, 8);font-size: 15px;" type="text" name="username" placeholder=" Kullanıcı Adınızı Giriniz"></td><br>
+</tr>
+  <tr>
+      <td colspan="2" align="center;" style="height:100px;">
+          <input type="submit" value="KAYDOL" style="width: 100px;height:23px;background-color: rgb(236, 236, 236);color:black;font-weight: bold;margin-left:190px;border-radius:0px 10px 0px 10px;">
+      </td>
+  </tr>
+        </table>
+        </div></form>
+</div>
+        </div>
+
+</div>
+    </div>
+    </body>
+</html>
